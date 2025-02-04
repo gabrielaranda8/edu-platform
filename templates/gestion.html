@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cursos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            color: #6a5acd;
+        }
+        .flash-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #6a5acd;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .form-container {
+            margin: 20px 0;
+        }
+        input[type="text"], textarea {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6a5acd;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5a4acd;
+        }
+        .lesson-form {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestión de Cursos</h1>
+
+    <!-- Mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Formulario para crear cursos -->
+    <div class="form-container">
+        <h2>Crear Nuevo Curso</h2>
+        <form method="POST" action="{{ url_for('create_course') }}">
+            <input type="text" name="title" placeholder="Título del curso" required>
+            <textarea name="description" placeholder="Descripción del curso" required></textarea>
+            <button type="submit">Crear Curso</button>
+        </form>
+    </div>
+
+    <!-- Lista de cursos existentes -->
+    <h2>Cursos Existentes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Lecciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+                <tr>
+                    <td>{{ course.id }}</td>
+                    <td>{{ course.title }}</td>
+                    <td>{{ course.description }}</td>
+                    <td>
+                        <ul>
+                            {% for lesson in course.lessons %}
+                                <li>{{ lesson.title }}</li>
+                            {% endfor %}
+                        </ul>
+                        <!-- Formulario para agregar lecciones -->
+                        <div class="lesson-form">
+                            <form method="POST" action="{{ url_for('add_lesson', course_id=course.id) }}">
+                                <input type="text" name="title" placeholder="Título de la lección" required>
+                                <textarea name="content" placeholder="Contenido de la lección" required></textarea>
+                                <button type="submit">Agregar Lección</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ url_for('delete_course', course_id=course.id) }}" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Enlace para volver al panel de administración -->
+    <p><a href="{{ url_for('admin') }}">Volver al Panel de Administración</a></p>
+</body>
+</html>
