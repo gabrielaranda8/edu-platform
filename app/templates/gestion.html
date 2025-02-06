@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,7 @@
             background-color: #f4f4f9;
             color: #333;
             padding: 20px;
+            margin: 0;
         }
         h1 {
             color: #6a5acd;
@@ -75,9 +76,21 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- Botón "Cerrar sesión" -->
+    <div class="logout-button">
+        <form method="POST" action="{{ url_for('auth.logout') }}">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </div>
+
     <h1>Gestión de Cursos</h1>
 
     <!-- Mensajes flash -->
@@ -92,9 +105,10 @@
     <!-- Formulario para crear cursos -->
     <div class="form-container">
         <h2>Crear Nuevo Curso</h2>
-        <form method="POST" action="{{ url_for('create_course') }}">
+        <form method="POST" action="{{ url_for('courses.create_course') }}">
             <input type="text" name="title" placeholder="Título del curso" required>
             <textarea name="description" placeholder="Descripción del curso" required></textarea>
+            <input type="text" name="image_url" placeholder="URL de la imagen del curso">
             <button type="submit">Crear Curso</button>
         </form>
     </div>
@@ -107,6 +121,7 @@
                 <th>ID</th>
                 <th>Título</th>
                 <th>Descripción</th>
+                <th>Imagen</th>
                 <th>Lecciones</th>
                 <th>Acciones</th>
             </tr>
@@ -118,6 +133,13 @@
                     <td>{{ course.title }}</td>
                     <td>{{ course.description }}</td>
                     <td>
+                        {% if course.image_url %}
+                            <img src="{{ course.image_url }}" alt="{{ course.title }}" style="max-width: 100px; height: auto; border-radius: 5px;">
+                        {% else %}
+                            Sin imagen
+                        {% endif %}
+                    </td>
+                    <td>
                         <ul>
                             {% for lesson in course.lessons %}
                                 <li>{{ lesson.title }}</li>
@@ -125,7 +147,7 @@
                         </ul>
                         <!-- Formulario para agregar lecciones -->
                         <div class="lesson-form">
-                            <form method="POST" action="{{ url_for('add_lesson', course_id=course.id) }}">
+                            <form method="POST" action="{{ url_for('courses.add_lesson', course_id=course.id) }}">
                                 <input type="text" name="title" placeholder="Título de la lección" required>
                                 <textarea name="content" placeholder="Contenido de la lección" required></textarea>
                                 <button type="submit">Agregar Lección</button>
@@ -133,7 +155,7 @@
                         </div>
                     </td>
                     <td>
-                        <form method="POST" action="{{ url_for('delete_course', course_id=course.id) }}" style="display:inline;">
+                        <form method="POST" action="{{ url_for('courses.delete_course', course_id=course.id) }}" style="display:inline;">
                             <button type="submit">Eliminar</button>
                         </form>
                     </td>
@@ -143,6 +165,6 @@
     </table>
 
     <!-- Enlace para volver al panel de administración -->
-    <p><a href="{{ url_for('admin') }}">Volver al Panel de Administración</a></p>
+    <p><a href="{{ url_for('admin.admin') }}">Volver al Panel de Administración</a></p>
 </body>
 </html>

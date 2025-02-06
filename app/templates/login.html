@@ -83,7 +83,7 @@
         {% if current_user.is_authenticated %}
             <div class="logout-message">
                 <p>Ya estás logueado como {{ current_user.id }}.</p>
-                <form action="{{ url_for('logout') }}" method="get">
+                <form action="{{ url_for('auth.logout') }}" method="get">
                     <button type="submit">Cerrar Sesión</button>
                 </form>
             </div>
