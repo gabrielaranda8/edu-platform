@@ -1,130 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f4f4f9;
             color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Encabezado */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #6a5acd;
+            border-bottom: 8px solid #4b0082;
+        }
+
+        .logo {
+            height: 50px;
+        }
+
+        .logout-button button {
+            background-color: #fff;
+            color: #6a5acd;
+            border: 2px solid #6a5acd;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout-button button:hover {
+            background-color: #6a5acd;
+            color: #fff;
+        }
+
+        /* Contenido principal */
+        .dashboard {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .dashboard h1 {
+            color: #6a5acd;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
             padding: 20px;
         }
-        h1 {
-            color: #6a5acd;
-        }
-        .flash-message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-        .flash-message.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .flash-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #6a5acd;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .form-container {
-            margin: 20px 0;
-        }
-        input[type="text"], input[type="password"], select {
-            padding: 10px;
-            margin: 5px 0;
-            width: 200px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
+
+        .dashboard-buttons button {
+            padding: 15px 30px;
             background-color: #6a5acd;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
-        button:hover {
+
+        .dashboard-buttons button:hover {
             background-color: #5a4acd;
         }
     </style>
 </head>
 <body>
-    <h1>Panel de Administración</h1>
-
-    <!-- Mensajes flash -->
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="flash-message {{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
-    <!-- Formulario para crear usuarios -->
-    <div class="form-container">
-        <h2>Crear Usuario</h2>
-        <form method="POST" action="{{ url_for('admin.admin') }}">
-            <input type="text" name="username" placeholder="Nombre de usuario" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <select name="role" required>
-                <option value="admin">Admin</option>
-                <option value="gestion">Gestión</option>
-                <option value="usuario">Usuario</option>
-            </select>
-            <button type="submit">Crear Usuario</button>
-        </form>
+    <!-- Encabezado con logo y botón de cerrar sesión -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='resources/logo.png') }}" alt="Logo de la Empresa" class="logo">
+        <div class="logout-button">
+            <form method="POST" action="{{ url_for('auth.logout') }}">
+                <button type="submit">Cerrar sesión</button>
+            </form>
+        </div>
     </div>
 
-    <!-- Lista de usuarios -->
-    <h2>Usuarios Existentes</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre de Usuario</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" style="display:inline;">
-                            <button type="submit">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Enlace para volver a la gestión -->
-    <p><a href="{{ url_for('courses.gestion') }}">Volver a la Gestión</a></p>
+    <!-- Panel de administración -->
+    <div class="dashboard">
+        <h1>Panel de Administración</h1>
+        <div class="dashboard-buttons">
+            <button onclick="window.location.href='{{ url_for('admin.dashboard_users') }}'">GESTIÓN USUARIOS</button>
+            <button onclick="window.location.href='{{ url_for('courses.gestion') }}'">GESTIÓN CURSOS</button>
+            <button onclick="window.location.href='{{ url_for('courses.cursos') }}'">CURSOS</button>
+        </div>
+    </div>
 </body>
 </html>

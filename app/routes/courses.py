@@ -38,6 +38,13 @@ def create_course():
 @courses_bp.route('/add_lesson/<int:course_id>', methods=['POST'])
 @login_required
 def add_lesson(course_id):
+    # Verificar si el curso ya tiene una lección
+    existing_lessons = Lesson.query.filter_by(course_id=course_id).all()
+    
+    if len(existing_lessons) >= 1:
+        flash("Este curso ya tiene una lección. No se pueden agregar más.", "error")
+        return redirect(url_for('courses.gestion'))
+
     title = request.form['title']
     content = request.form['content']
     new_lesson = Lesson(title=title, content=content, course_id=course_id)
@@ -45,7 +52,7 @@ def add_lesson(course_id):
     db.session.commit()
     flash(f"Lección '{title}' agregada exitosamente.", "success")
     return redirect(url_for('courses.gestion'))
-
+    
 @courses_bp.route('/delete_course/<int:course_id>', methods=['POST'])
 @login_required
 def delete_course(course_id):

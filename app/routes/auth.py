@@ -1,4 +1,3 @@
-# auth.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from ..models import User
@@ -18,9 +17,7 @@ def login():
             login_user(user)
             flash("Has iniciado sesión correctamente.", "success")
             if user.role == 'admin':
-                return redirect(url_for('admin.admin'))
-            elif user.role == 'gestion':
-                return redirect(url_for('courses.gestion'))
+                return redirect(url_for('admin.admin'))  # Redirigir al dashboard del admin
             else:
                 return redirect(url_for('courses.cursos'))
         else:
