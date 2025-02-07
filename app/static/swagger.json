@@ -1,0 +1,266 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API de Gestión de Cursos",
+    "description": "API para la gestión de cursos, lecciones y usuarios con roles.",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/admin": {
+      "get": {
+        "summary": "Página principal del Admin",
+        "description": "Accede a la página principal de administración. Requiere que el usuario tenga rol de 'admin'.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página de administración cargada exitosamente."
+          },
+          "401": {
+            "description": "Usuario no autorizado."
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo usuario",
+        "description": "Permite crear un nuevo usuario con nombre, contraseña y rol. Solo accesible para administradores.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "username",
+            "type": "string",
+            "required": true,
+            "description": "Nombre del nuevo usuario."
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "required": true,
+            "description": "Contraseña del nuevo usuario."
+          },
+          {
+            "in": "formData",
+            "name": "role",
+            "type": "string",
+            "required": true,
+            "description": "Rol del nuevo usuario (admin, gestion, etc.)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario creado exitosamente."
+          },
+          "400": {
+            "description": "Error en la solicitud (campos faltantes o inválidos)."
+          },
+          "401": {
+            "description": "Usuario no autorizado."
+          }
+        }
+      }
+    },
+    "/admin/delete/{user_id}": {
+      "post": {
+        "summary": "Eliminar un usuario",
+        "description": "Permite eliminar un usuario dado su ID. Solo accesible para administradores.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "type": "integer",
+            "required": true,
+            "description": "ID del usuario a eliminar."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario eliminado exitosamente."
+          },
+          "400": {
+            "description": "Usuario no encontrado."
+          },
+          "401": {
+            "description": "Usuario no autorizado."
+          }
+        }
+      }
+    },
+    "/admin/dashboard_users": {
+      "get": {
+        "summary": "Ver listado de usuarios",
+        "description": "Accede a la lista de usuarios registrados. Solo accesible para administradores.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios cargada exitosamente."
+          },
+          "401": {
+            "description": "Usuario no autorizado."
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Iniciar sesión",
+        "description": "Permite a los usuarios iniciar sesión con nombre de usuario y contraseña.",
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "username",
+            "type": "string",
+            "required": true,
+            "description": "Nombre de usuario."
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "required": true,
+            "description": "Contraseña del usuario."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión exitoso."
+          },
+          "401": {
+            "description": "Credenciales incorrectas."
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "summary": "Cerrar sesión",
+        "description": "Permite al usuario cerrar sesión.",
+        "responses": {
+          "200": {
+            "description": "Cierre de sesión exitoso."
+          }
+        }
+      }
+    },
+    "/cursos": {
+      "get": {
+        "summary": "Ver lista de cursos",
+        "description": "Accede a la lista de cursos disponibles.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de cursos cargada exitosamente."
+          },
+          "401": {
+            "description": "Usuario no autorizado."
+          }
+        }
+      }
+    },
+    "/gestion": {
+      "get": {
+        "summary": "Gestionar cursos",
+        "description": "Accede a la página para gestionar los cursos. Solo accesible para administradores y usuarios con rol 'gestion'.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página de gestión de cursos cargada exitosamente."
+          },
+          "401": {
+            "description": "Usuario no autorizado."
+          }
+        }
+      }
+    },
+    "/create_course": {
+      "post": {
+        "summary": "Crear un curso",
+        "description": "Permite crear un nuevo curso con título, descripción y URL de imagen.",
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "Título del curso."
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "required": true,
+            "description": "Descripción del curso."
+          },
+          {
+            "in": "formData",
+            "name": "image_url",
+            "type": "string",
+            "required": true,
+            "description": "URL de la imagen del curso."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Curso creado exitosamente."
+          },
+          "400": {
+            "description": "Error en la solicitud (campos faltantes o inválidos)."
+          },
+          "401": {
+            "description": "Usuario no autorizado."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Token JWT para autenticación."
+    }
+  }
+}

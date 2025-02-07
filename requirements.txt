@@ -4,6 +4,7 @@ Flask-Login==0.6.2
 PyJWT==2.8.0
 Werkzeug==2.3.7
 Flask-CORS==4.0.0
+flask-swagger-ui
 python-dotenv==1.0.0
 Faker==18.11.2
 pytest==7.4.0

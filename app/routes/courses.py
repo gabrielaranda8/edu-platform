@@ -17,7 +17,7 @@ def cursos():
 @courses_bp.route('/gestion')
 @login_required
 def gestion():
-    if current_user.role not in ['admin', 'gestion']:
+    if current_user.role != 'admin':
         flash("No tienes permisos para acceder a esta página.", "error")
         return redirect(url_for('auth.login'))
     courses = Course.query.all()
