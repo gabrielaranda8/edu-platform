@@ -2,14 +2,23 @@
   "swagger": "2.0",
   "info": {
     "title": "API de Gestión de Cursos",
-    "description": "API para la gestión de cursos, lecciones y usuarios con roles.",
-    "version": "1.0.0"
+    "description": "Esta API permite la gestión de cursos, lecciones y usuarios con diferentes roles (admin, usuario). Proporciona funcionalidades para administrar usuarios, autenticar y gestionar contenido educativo.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Soporte Técnico",
+      "url": "https://gabrielaranda.com",
+      "email": "gabrielaranda8@gmail.com"
+    },
+    "license": {
+      "name": "Licencia MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
   },
-  "basePath": "/",
+  "basePath": "/api",
   "paths": {
     "/admin": {
       "get": {
-        "summary": "Página principal del Admin",
+        "summary": "Página principal del Administrador",
         "description": "Accede a la página principal de administración. Requiere que el usuario tenga rol de 'admin'.",
         "security": [
           {
@@ -18,16 +27,24 @@
         ],
         "responses": {
           "200": {
-            "description": "Página de administración cargada exitosamente."
+            "description": "Página de administración cargada exitosamente.",
+            "schema": {
+              "type": "string",
+              "example": "Bienvenido al panel de administración"
+            }
           },
           "401": {
-            "description": "Usuario no autorizado."
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para acceder a esta página."
+            }
           }
         }
       },
       "post": {
         "summary": "Crear un nuevo usuario",
-        "description": "Permite crear un nuevo usuario con nombre, contraseña y rol. Solo accesible para administradores.",
+        "description": "Crea un nuevo usuario con nombre, contraseña y rol. Solo accesible para administradores.",
         "security": [
           {
             "bearerAuth": []
@@ -58,13 +75,24 @@
         ],
         "responses": {
           "200": {
-            "description": "Usuario creado exitosamente."
+            "description": "Usuario creado exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           },
           "400": {
-            "description": "Error en la solicitud (campos faltantes o inválidos)."
+            "description": "Error en la solicitud (campos faltantes o inválidos).",
+            "schema": {
+              "type": "string",
+              "example": "Faltan campos requeridos."
+            }
           },
           "401": {
-            "description": "Usuario no autorizado."
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para crear usuarios."
+            }
           }
         }
       }
@@ -72,7 +100,7 @@
     "/admin/delete/{user_id}": {
       "post": {
         "summary": "Eliminar un usuario",
-        "description": "Permite eliminar un usuario dado su ID. Solo accesible para administradores.",
+        "description": "Elimina un usuario dado su ID. Solo accesible para administradores.",
         "security": [
           {
             "bearerAuth": []
@@ -89,13 +117,25 @@
         ],
         "responses": {
           "200": {
-            "description": "Usuario eliminado exitosamente."
+            "description": "Usuario eliminado exitosamente.",
+            "schema": {
+              "type": "string",
+              "example": "Usuario eliminado."
+            }
           },
           "400": {
-            "description": "Usuario no encontrado."
+            "description": "Usuario no encontrado.",
+            "schema": {
+              "type": "string",
+              "example": "El usuario no existe."
+            }
           },
           "401": {
-            "description": "Usuario no autorizado."
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para eliminar usuarios."
+            }
           }
         }
       }
@@ -111,10 +151,20 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de usuarios cargada exitosamente."
+            "description": "Lista de usuarios cargada exitosamente.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
           },
           "401": {
-            "description": "Usuario no autorizado."
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para ver la lista de usuarios."
+            }
           }
         }
       }
@@ -141,10 +191,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Inicio de sesión exitoso."
+            "description": "Inicio de sesión exitoso.",
+            "schema": {
+              "type": "string",
+              "example": "Bienvenido de nuevo."
+            }
           },
           "401": {
-            "description": "Credenciales incorrectas."
+            "description": "Credenciales incorrectas.",
+            "schema": {
+              "type": "string",
+              "example": "Las credenciales no son válidas."
+            }
           }
         }
       }
@@ -155,7 +213,11 @@
         "description": "Permite al usuario cerrar sesión.",
         "responses": {
           "200": {
-            "description": "Cierre de sesión exitoso."
+            "description": "Cierre de sesión exitoso.",
+            "schema": {
+              "type": "string",
+              "example": "Sesión cerrada exitosamente."
+            }
           }
         }
       }
@@ -171,10 +233,20 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de cursos cargada exitosamente."
+            "description": "Lista de cursos cargada exitosamente.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Course"
+              }
+            }
           },
           "401": {
-            "description": "Usuario no autorizado."
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para acceder a los cursos."
+            }
           }
         }
       }
@@ -190,10 +262,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Página de gestión de cursos cargada exitosamente."
+            "description": "Página de gestión de cursos cargada exitosamente.",
+            "schema": {
+              "type": "string",
+              "example": "Bienvenido al panel de gestión de cursos."
+            }
           },
           "401": {
-            "description": "Usuario no autorizado."
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para acceder a la página de gestión."
+            }
           }
         }
       }
@@ -201,7 +281,7 @@
     "/create_course": {
       "post": {
         "summary": "Crear un curso",
-        "description": "Permite crear un nuevo curso con título, descripción y URL de imagen.",
+        "description": "Permite crear un nuevo curso con título, descripción y URL de video.",
         "parameters": [
           {
             "in": "formData",
@@ -227,13 +307,24 @@
         ],
         "responses": {
           "200": {
-            "description": "Curso creado exitosamente."
+            "description": "Curso creado exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
           },
           "400": {
-            "description": "Error en la solicitud (campos faltantes o inválidos)."
+            "description": "Error en la solicitud (campos faltantes o inválidos).",
+            "schema": {
+              "type": "string",
+              "example": "Faltan campos requeridos."
+            }
           },
           "401": {
-            "description": "Usuario no autorizado."
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para crear cursos."
+            }
           }
         }
       }
@@ -244,23 +335,42 @@
       "type": "object",
       "properties": {
         "username": {
-          "type": "string"
+          "type": "string",
+          "example": "admin"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "example": "password123"
         },
         "role": {
-          "type": "string"
+          "type": "string",
+          "example": "admin"
         }
+      }
+    },
+    "Course": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Curso de Python"
+        },
+        "description": {
+          "type": "string",
+          "example": "Aprende Python desde cero"
+        },
+        "image_url": {
+          "type": "string",
+          "example": "https://link_youtube.com
       }
     }
   },
   "securityDefinitions": {
     "bearerAuth": {
       "type": "apiKey",
-      "name": "Authorization",
       "in": "header",
-      "description": "Token JWT para autenticación."
+      "name": "Authorization",
+      "description": "Proporciona un token de autenticación Bearer."
     }
   }
 }
