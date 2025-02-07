@@ -41,60 +41,6 @@
             }
           }
         }
-      },
-      "post": {
-        "summary": "Crear un nuevo usuario",
-        "description": "Crea un nuevo usuario con nombre, contraseña y rol. Solo accesible para administradores.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "formData",
-            "name": "username",
-            "type": "string",
-            "required": true,
-            "description": "Nombre del nuevo usuario."
-          },
-          {
-            "in": "formData",
-            "name": "password",
-            "type": "string",
-            "required": true,
-            "description": "Contraseña del nuevo usuario."
-          },
-          {
-            "in": "formData",
-            "name": "role",
-            "type": "string",
-            "required": true,
-            "description": "Rol del nuevo usuario (admin, gestion, etc.)."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Usuario creado exitosamente.",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Error en la solicitud (campos faltantes o inválidos).",
-            "schema": {
-              "type": "string",
-              "example": "Faltan campos requeridos."
-            }
-          },
-          "401": {
-            "description": "Usuario no autorizado.",
-            "schema": {
-              "type": "string",
-              "example": "No tiene permisos para crear usuarios."
-            }
-          }
-        }
       }
     },
     "/admin/delete/{user_id}": {
@@ -164,6 +110,60 @@
             "schema": {
               "type": "string",
               "example": "No tiene permisos para ver la lista de usuarios."
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo usuario",
+        "description": "Crea un nuevo usuario con nombre, contraseña y rol. Solo accesible para administradores.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "username",
+            "type": "string",
+            "required": true,
+            "description": "Nombre del nuevo usuario."
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "required": true,
+            "description": "Contraseña del nuevo usuario."
+          },
+          {
+            "in": "formData",
+            "name": "role",
+            "type": "string",
+            "required": true,
+            "description": "Rol del nuevo usuario (admin, gestion, etc.)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario creado exitosamente.",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Error en la solicitud (campos faltantes o inválidos).",
+            "schema": {
+              "type": "string",
+              "example": "Faltan campos requeridos."
+            }
+          },
+          "401": {
+            "description": "Usuario no autorizado.",
+            "schema": {
+              "type": "string",
+              "example": "No tiene permisos para crear usuarios."
             }
           }
         }
@@ -299,10 +299,10 @@
           },
           {
             "in": "formData",
-            "name": "image_url",
+            "name": "video_url",
             "type": "string",
             "required": true,
-            "description": "URL de la imagen del curso."
+            "description": "URL del video del curso."
           }
         ],
         "responses": {
@@ -331,37 +331,43 @@
     }
   },
   "definitions": {
-    "User": {
-      "type": "object",
-      "properties": {
-        "username": {
-          "type": "string",
-          "example": "admin"
-        },
-        "password": {
-          "type": "string",
-          "example": "password123"
-        },
-        "role": {
-          "type": "string",
-          "example": "admin"
-        }
-      }
-    },
     "Course": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
         "title": {
-          "type": "string",
-          "example": "Curso de Python"
+          "type": "string"
         },
         "description": {
-          "type": "string",
-          "example": "Aprende Python desde cero"
+          "type": "string"
         },
         "image_url": {
+          "type": "string"
+        },
+        "created_at": {
           "type": "string",
-          "example": "https://link_youtube.com
+          "example": "2025-02-07T08:00:00Z"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "2025-02-07T08:00:00Z"
+        }
       }
     }
   },
@@ -370,7 +376,8 @@
       "type": "apiKey",
       "in": "header",
       "name": "Authorization",
-      "description": "Proporciona un token de autenticación Bearer."
+      "description": "Autenticación mediante token Bearer"
     }
   }
 }
+

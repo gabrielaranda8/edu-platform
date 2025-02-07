@@ -7,9 +7,9 @@ from .utils import extract_youtube_id
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = 'your_secret_key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///morphy.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.secret_key = 'asdasdasda555asd65asd6a51d6a55as1d' ## deberan pasarse como variables de entorno en el servicio web
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///morphy.db' ## deberan pasarse como variables de entorno en el servicio web
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False ## deberan pasarse como variables de entorno en el servicio web
 
     # Inicializar db y login_manager
     db.init_app(app)
